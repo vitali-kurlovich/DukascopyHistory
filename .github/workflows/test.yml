@@ -1,0 +1,31 @@
+name: Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test_macos:
+    env:
+      CODECOV_TOKEN : ${{ secrets.CODECOV_TOKEN }}
+    
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run tests
+      run: xcodebuild -scheme DukascopyHistory test -destination 'platform=macOS' -enableCodeCoverage YES -parallel-testing-enabled YES build test
+
+    - name: Upload coverage to Codecov
+      run: bash <(curl -s https://codecov.io/bash) -X xcodellvm
+
+  test_ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Generate Linux Tests
+      run: chmod +x generate_linux_tests.rb && ./generate_linux_tests.rb
+      
+    - name: Run tests
+      run: swift test 
