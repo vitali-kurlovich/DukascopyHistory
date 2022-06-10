@@ -19,9 +19,9 @@ let package = Package(
 
         .package(url: "https://github.com/vitali-kurlovich/DukascopyURL.git", from: "2.3.0"),
 
-        .package(url: "https://github.com/vitali-kurlovich/DukascopyModel.git", from: "1.12.0"),
+        .package(url: "https://github.com/vitali-kurlovich/DukascopyModel.git", from: "1.13.0"),
 
-        .package(url: "https://github.com/vitali-kurlovich/DukascopyDecoder.git", from: "2.6.0"),
+        .package(url: "https://github.com/vitali-kurlovich/DukascopyDecoder.git", from: "2.7.0"),
 
         .package(url: "https://github.com/vitali-kurlovich/KeyValueCache.git", from: "1.1.0"),
 
