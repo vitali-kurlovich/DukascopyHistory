@@ -10,19 +10,19 @@ import NIO
 
 public
 extension DukascopyHistory {
-    func fetchInstruments() -> EventLoopFuture<[Group]> {
+    func fetchInstrumentGroups() -> EventLoopFuture<[Group]> {
         cache.groups().flatMapWithEventLoop { groups, eventLoop -> EventLoopFuture<[Group]> in
             if let groups = groups {
                 return eventLoop.makeSucceededFuture(groups)
             }
-            return self.fetchRemoteInstruments()
+            return self.fetchRemoteInstrumentGroup()
         }
     }
 }
 
 private
 extension DukascopyHistory {
-    func fetchRemoteInstruments() -> EventLoopFuture<[Group]> {
+    func fetchRemoteInstrumentGroup() -> EventLoopFuture<[Group]> {
         let task = instrumentsTask()
 
         let result = task.result.flatMapThrowing { buffer -> [Group] in
