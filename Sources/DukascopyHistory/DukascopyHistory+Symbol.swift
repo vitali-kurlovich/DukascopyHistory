@@ -13,7 +13,7 @@ extension DukascopyHistory {
     }
 
     func fetchInstrument<S: StringProtocol>(by symbol: S, caseInsensitive: Bool = true) -> EventLoopFuture<Instrument> {
-        let groups = fetchInstruments()
+        let groups = fetchInstrumentGroups()
 
         return groups.flatMapThrowing { groups -> Instrument in
 
