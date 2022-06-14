@@ -8,7 +8,7 @@ import NIO
 
 public
 extension DukascopyHistoryProvider {
-    func firstInstrumentGroups(by id: String, caseInsensitive: Bool = true) -> EventLoopFuture<Group?> {
+    func instrumentGroups(by id: String, caseInsensitive: Bool = true) -> EventLoopFuture<Group?> {
         let id = caseInsensitive ? id.lowercased() : id
 
         return firstInstrumentGroups { $0.id == id || caseInsensitive && $0.id.lowercased() == id
@@ -35,7 +35,7 @@ extension DukascopyHistoryProvider {
 
 public
 extension DukascopyHistoryProvider {
-    func firstInstrument(by symbol: String, caseInsensitive: Bool = true) -> EventLoopFuture<Instrument?> {
+    func instrument(by symbol: String, caseInsensitive: Bool = true) -> EventLoopFuture<Instrument?> {
         let symbol = caseInsensitive ? symbol.lowercased() : symbol
 
         return firstInstrument { $0.symbol == symbol || caseInsensitive && $0.symbol.lowercased() == symbol
