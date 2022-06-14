@@ -160,7 +160,7 @@ class DukascopyHistoryTests: XCTestCase {
 
         let downloader = DukascopyHistory(eventLoopGroupProvider: .createNew)
 
-        let result = downloader.fetchInstruments()
+        let result = downloader.fetchInstrumentGroups()
 
         result.whenSuccess { groups in
             XCTAssertFalse(groups.isEmpty)
