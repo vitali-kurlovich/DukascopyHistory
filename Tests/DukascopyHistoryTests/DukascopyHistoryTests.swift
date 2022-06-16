@@ -174,48 +174,16 @@ class DukascopyHistoryTests: XCTestCase {
         wait(for: [expectation], timeout: 20.0)
     }
 
-    func testDetchInstrument() throws {
-        let downloader = DukascopyHistory(eventLoopGroupProvider: .createNew)
-
-        let usdThbInstrument = downloader.fetchInstrument(by: "USD/THB", caseInsensitive: false)
-
-        let expUSDTHB = XCTestExpectation(description: "Fetch USD/THB instrument")
-
-        usdThbInstrument.whenSuccess { instrument in
-            XCTAssertEqual(instrument.symbol, "USD/THB")
-            expUSDTHB.fulfill()
-        }
-
-        usdThbInstrument.whenFailure { error in
-            XCTFail(error.localizedDescription)
-            expUSDTHB.fulfill()
-        }
-
-        wait(for: [expUSDTHB], timeout: 10.0)
-
-        let expFail = XCTestExpectation(description: "Fetch non-existent instrument")
-        let falilInstrument = downloader.fetchInstrument(by: "FailSymbol___$")
-
-        falilInstrument.whenFailure { _ in
-            expFail.fulfill()
-        }
-
-        wait(for: [expFail], timeout: 10.0)
-    }
-
     func testFetchQuoteTicks() throws {
         let expectation = XCTestExpectation(description: "Fetch ticks")
 
         let downloader = DukascopyHistory(eventLoopGroupProvider: .createNew)
 
-        let instrument = downloader.fetchInstrument(by: "USD/THB", caseInsensitive: false)
+        let provider = downloader.provider()
 
         let begin = formatter.date(from: "02-01-2020 01:00")!
 
-        let result = instrument.flatMap { instrument in
-
-            downloader.fetchQuoteTicks(for: instrument, date: begin)
-        }
+        let result = provider.quoteTicks(by: "USD/THB", caseInsensitive: false, date: begin)
 
         result.whenSuccess { (instrument: Instrument, _: Range<Date>, ticks: [Tick]) in
             XCTAssertEqual(instrument.symbol, "USD/THB")
@@ -250,7 +218,7 @@ class DukascopyHistoryTests: XCTestCase {
 
         let expSymbol = XCTestExpectation(description: "Fetch ticks by symbol")
 
-        let result_1 = downloader.fetchQuoteTicks(by: "usd/thb", date: begin)
+        let result_1 = provider.quoteTicks(by: "usd/thb", date: begin)
 
         result_1.whenSuccess { (instrument: Instrument, _: Range<Date>, ticks: [Tick]) in
             XCTAssertEqual(instrument.symbol, "USD/THB")
@@ -291,15 +259,12 @@ class DukascopyHistoryTests: XCTestCase {
 
         let downloader = DukascopyHistory(eventLoopGroupProvider: .createNew, backgroundActivityLogger: logger)
 
-        let instrument = downloader.fetchInstrument(by: "Usd/Thb")
+        let provider = downloader.provider()
 
         let begin = formatter.date(from: "02-01-2020 01:00")!
         let end = formatter.date(from: "02-01-2020 03:00")!
 
-        let result = instrument.flatMap { instrument in
-
-            downloader.fetchQuoteTicks(for: instrument, range: begin ..< end)
-        }
+        let result = provider.quoteTicks(by: "Usd/Thb", range: begin ..< end)
 
         result.whenSuccess { (instrument: Instrument, _: Range<Date>, ticks: [Tick]) in
             XCTAssertEqual(instrument.symbol, "USD/THB")
@@ -334,7 +299,7 @@ class DukascopyHistoryTests: XCTestCase {
 
         let expSymbol = XCTestExpectation(description: "Fetch ticks by symbol")
 
-        let result_1 = downloader.fetchQuoteTicks(by: "usd/thb", range: begin ..< end)
+        let result_1 = provider.quoteTicks(by: "usd/thb", range: begin ..< end)
 
         result_1.whenSuccess { (instrument: Instrument, _: Range<Date>, ticks: [Tick]) in
             XCTAssertEqual(instrument.symbol, "USD/THB")
