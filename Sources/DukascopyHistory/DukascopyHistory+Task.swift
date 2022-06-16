@@ -11,6 +11,11 @@ import NIOHTTP1
 private var urlFactory = DukascopyRemoteURL()
 
 public
+enum FetchTaskError: Error {
+    case requestFailed(HTTPResponseStatus)
+}
+
+public
 extension DukascopyHistory {
     typealias Format = DukascopyRemoteURL.Format
 
@@ -20,10 +25,6 @@ extension DukascopyHistory {
         public let period: Range<Date>
 
         public let result: EventLoopFuture<(data: ByteBuffer?, filename: String, period: Range<Date>)>
-    }
-
-    enum FetchTaskError: Error {
-        case requestFailed(HTTPResponseStatus)
     }
 
     func tasks(format: Format, for filename: String, range: Range<Date>) -> [FetchTask] {
