@@ -9,9 +9,8 @@ import NIO
 public
 extension DukascopyHistoryProvider {
     func instrumentGroup(by id: String, caseInsensitive: Bool = true) -> EventLoopFuture<Group?> {
-        let id = caseInsensitive ? id.lowercased() : id
-
-        return firstInstrumentGroups { $0.id == id || caseInsensitive && $0.id.lowercased() == id
+        firstInstrumentGroups { (caseInsensitive && id.caseInsensitiveCompare($0.id) == .orderedSame
+        ) || (!caseInsensitive && id == $0.id)
         }
     }
 
@@ -36,9 +35,9 @@ extension DukascopyHistoryProvider {
 public
 extension DukascopyHistoryProvider {
     func instrument(by symbol: String, caseInsensitive: Bool = true) -> EventLoopFuture<Instrument?> {
-        let symbol = caseInsensitive ? symbol.lowercased() : symbol
-
-        return firstInstrument { $0.symbol == symbol || caseInsensitive && $0.symbol.lowercased() == symbol
+        firstInstrument {
+            (caseInsensitive && symbol.caseInsensitiveCompare($0.symbol) == .orderedSame)
+                || (!caseInsensitive && symbol == $0.symbol)
         }
     }
 
