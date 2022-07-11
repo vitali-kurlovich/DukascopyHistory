@@ -23,9 +23,6 @@ jobs:
   test_ubuntu:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Generate Linux Tests
-      run: chmod +x generate_linux_tests.rb && ./generate_linux_tests.rb
-      
+    - uses: actions/checkout@v3      
     - name: Run tests
       run: swift test 
